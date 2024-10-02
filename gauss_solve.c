@@ -66,3 +66,45 @@ void lu_in_place_reconstruct(int n, double A[n][n])
     }
   }
 }
+
+void plu(int n, double A[n][n], int P[n]) {
+    // Initialize permutation matrix P to the identity matrix
+    for (int i = 0; i < n; i++) {
+        P[i] = i;
+    }
+
+    // Perform Gaussian elimination with partial pivoting
+    for (int k = 0; k < n; k++) {
+        // Find the row with the maximum pivot value
+        int max_row = k;
+        for (int i = k + 1; i < n; i++) {
+            if (fabs(A[i][k]) > fabs(A[max_row][k])) {
+                max_row = i;
+            }
+        }
+
+        // Swap rows in matrix A and update the permutation array P
+        if (max_row != k) {
+            // Swap rows k and max_row in A
+            for (int j = 0; j < n; j++) {
+                double temp = A[k][j];
+                A[k][j] = A[max_row][j];
+                A[max_row][j] = temp;
+            }
+
+            // Swap corresponding entries in the permutation array P
+            int temp = P[k];
+            P[k] = P[max_row];
+            P[max_row] = temp;
+        }
+
+        // Perform Gaussian elimination
+        for (int i = k + 1; i < n; i++) {
+            A[i][k] /= A[k][k];  // Store the multiplier (L_ik)
+
+            for (int j = k + 1; j < n; j++) {
+                A[i][j] -= A[i][k] * A[k][j];  // Update the U matrix
+            }
+        }
+    }
+}
