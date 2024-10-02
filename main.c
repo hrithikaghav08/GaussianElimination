@@ -224,3 +224,105 @@ int main()
   test_gauss_solve_with_zero_pivot();  
   exit(EXIT_SUCCESS);
 }
+
+// Function declaration for plu
+void plu(int n, double A[n][n], int P[n]);
+
+// Helper function to print a matrix
+void print_matrix(int n, double A[n][n]) {
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            printf("%8.4f ", A[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+// Helper function to print a permutation vector
+void print_permutation(int n, int P[n]) {
+    for (int i = 0; i < n; i++) {
+        printf("%d ", P[i]);
+    }
+    printf("\n");
+}
+
+// Helper function to compute the product of a permutation matrix P and a matrix L
+void permute_matrix(int n, int P[n], double A[n][n], double PA[n][n]) {
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            PA[i][j] = A[P[i]][j];
+        }
+    }
+}
+
+int main() {
+    // Example matrix
+    int n = 3;
+    double A[3][3] = {
+        {2.0, -1.0, -2.0},
+        {-4.0, 6.0, 3.0},
+        {-4.0, -2.0, 8.0}
+    };
+
+    int P[3];  // Permutation array
+
+    // Print the original matrix A
+    printf("Original matrix A:\n");
+    print_matrix(n, A);
+
+    // Perform PLU decomposition
+    plu(n, A, P);
+
+    // Print the resulting L and U matrices stored in A
+    printf("\nL and U matrices (stored in A):\n");
+    print_matrix(n, A);
+
+    // Print the permutation matrix P
+    printf("\nPermutation vector P:\n");
+    print_permutation(n, P);
+
+    // Reconstruct PL and AU
+    double PL[3][3];
+    double AU[3][3];
+
+    // Compute PL
+    permute_matrix(n, P, A, PL);  // P * L (apply permutation to rows)
+
+    // Compute AU
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            AU[i][j] = 0.0;
+            for (int k = 0; k < n; k++) {
+                AU[i][j] += A[i][k] * A[k][j];
+            }
+        }
+    }
+
+    // Print PL
+    printf("\nPL (Permutation * Lower Triangular part of A):\n");
+    print_matrix(n, PL);
+
+    // Print AU
+    printf("\nAU (Upper triangular part of A multiplied by itself):\n");
+    print_matrix(n, AU);
+
+    // Test if PL and AU match
+    double tol = 1e-6; // Tolerance for floating-point comparison
+    int is_equal = 1;
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            if (fabs(PL[i][j] - AU[i][j]) > tol) {
+                is_equal = 0;
+                break;
+            }
+        }
+    }
+
+    if (is_equal) {
+        printf("\nPL = AU: The decomposition is correct!\n");
+    } else {
+        printf("\nPL != AU: The decomposition is incorrect!\n");
+    }
+
+    return 0;
+}
