@@ -73,7 +73,58 @@ def lu(A, use_c=False):
     else:
         return lu_python(A)
 
+def plu_python(A):
+    """Python implementation of PA=LU decomposition with partial pivoting."""
+    n = len(A)
+    P = list(range(n))
 
+    for k in range(n):
+        # Find pivot
+        pivot = max(range(k, n), key=lambda i: abs(A[i][k]))
+        if A[pivot][k] == 0:
+            raise ValueError("Singular matrix")
+        # Swap rows
+        if pivot != k:
+            A[k], A[pivot] = A[pivot], A[k]
+            P[k], P[pivot] = P[pivot], P[k]
+        # Perform LU decomposition
+        for i in range(k+1, n):
+            A[i][k] /= A[k][k]
+            for j in range(k+1, n):
+                A[i][j] -= A[i][k] * A[k][j]
+    
+    L, U = unpack(A)
+    return P, L, U
+
+def plu_c(A):
+    """C implementation of PA=LU decomposition."""
+    lib = ctypes.CDLL(gauss_library_path)
+    n = len(A)
+    flat_array_2d = [item for row in A for item in row]
+    c_array_2d = (ctypes.c_double * len(flat_array_2d))(*flat_array_2d)
+    
+    # Create an array for the permutation vector P
+    P = (ctypes.c_int * n)()
+
+    # Define the function signature
+    lib.plu.argtypes = (ctypes.c_int, ctypes.POINTER(ctypes.c_double), ctypes.POINTER(ctypes.c_int))
+    
+    # Call the C function
+    lib.plu(n, c_array_2d, P)
+    
+    # Convert the modified A matrix and P array back to Python structures
+    modified_array_2d = [[c_array_2d[i * n + j] for j in range(n)] for i in range(n)]
+    P_list = list(P)
+    
+    L, U = unpack(modified_array_2d)
+    return P_list, L, U
+
+def plu(A, use_c=False):
+    """Perform PA=LU decomposition using either Python or C."""
+    if use_c:
+        return plu_c(A)
+    else:
+        return plu_python(A)
 
 if __name__ == "__main__":
 
