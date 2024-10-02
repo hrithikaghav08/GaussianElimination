@@ -223,41 +223,8 @@ int main()
   benchmark_test_dynamic_alt(2000);
   test_gauss_solve_with_zero_pivot();  
   exit(EXIT_SUCCESS);
-}
 
-// Function declaration for plu
-void plu(int n, double A[n][n], int P[n]);
-
-// Helper function to print a matrix
-void print_matrix(int n, double A[n][n]) {
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < n; j++) {
-            printf("%8.4f ", A[i][j]);
-        }
-        printf("\n");
-    }
-}
-
-// Helper function to print a permutation vector
-void print_permutation(int n, int P[n]) {
-    for (int i = 0; i < n; i++) {
-        printf("%d ", P[i]);
-    }
-    printf("\n");
-}
-
-// Helper function to compute the product of a permutation matrix P and a matrix L
-void permute_matrix(int n, int P[n], double A[n][n], double PA[n][n]) {
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < n; j++) {
-            PA[i][j] = A[P[i]][j];
-        }
-    }
-}
-
-int main() {
-    // Example matrix
-    int n = 3;
+  int n = 3;
     double A[3][3] = {
         {2.0, -1.0, -2.0},
         {-4.0, 6.0, 3.0},
@@ -325,4 +292,39 @@ int main() {
     }
 
     return 0;
+}
+
+// Function declaration for plu
+void plu(int n, double A[n][n], int P[n]);
+
+// Helper function to print a matrix
+void print_matrix(int n, double A[n][n]) {
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            printf("%8.4f ", A[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+// Helper function to print a permutation vector
+void print_permutation(int n, int P[n]) {
+    for (int i = 0; i < n; i++) {
+        printf("%d ", P[i]);
+    }
+    printf("\n");
+}
+
+// Helper function to compute the product of a permutation matrix P and a matrix L
+void permute_matrix(int n, int P[n], double A[n][n], double PA[n][n]) {
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            PA[i][j] = A[P[i]][j];
+        }
+    }
+}
+
+int main() {
+    // Example matrix
+    
 }
