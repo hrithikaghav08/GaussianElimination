@@ -297,16 +297,6 @@ int main()
 // Function declaration for plu
 void plu(int n, double A[n][n], int P[n]);
 
-// Helper function to print a matrix
-void print_matrix(int n, double A[n][n]) {
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < n; j++) {
-            printf("%8.4f ", A[i][j]);
-        }
-        printf("\n");
-    }
-}
-
 // Helper function to print a permutation vector
 void print_permutation(int n, int P[n]) {
     for (int i = 0; i < n; i++) {
