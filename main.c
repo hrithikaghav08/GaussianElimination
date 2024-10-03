@@ -235,14 +235,14 @@ int main()
 
     // Print the original matrix A
     printf("Original matrix A:\n");
-    print_matrix(n, A);
+    print_matrix(n, A, FLAG_WHOLE);
 
     // Perform PLU decomposition
     plu(n, A, P);
 
     // Print the resulting L and U matrices stored in A
     printf("\nL and U matrices (stored in A):\n");
-    print_matrix(n, A);
+    print_matrix(n, A, FLAG_WHOLE);
 
     // Print the permutation matrix P
     printf("\nPermutation vector P:\n");
@@ -267,11 +267,11 @@ int main()
 
     // Print PL
     printf("\nPL (Permutation * Lower Triangular part of A):\n");
-    print_matrix(n, PL);
+    print_matrix(n, PL, FLAG_WHOLE);
 
     // Print AU
     printf("\nAU (Upper triangular part of A multiplied by itself):\n");
-    print_matrix(n, AU);
+    print_matrix(n, AU, FLAG_WHOLE);
 
     // Test if PL and AU match
     double tol = 1e-6; // Tolerance for floating-point comparison
