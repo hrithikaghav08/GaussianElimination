@@ -324,7 +324,3 @@ void permute_matrix(int n, int P[n], double A[n][n], double PA[n][n]) {
     }
 }
 
-int main() {
-    // Example matrix
-    
-}
